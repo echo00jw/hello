@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class user extends Model
+class article extends Model
 {
-   public $timestamps  = false;
-    //
+     public $timestamps  = false;
 }
