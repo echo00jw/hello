@@ -4,9 +4,9 @@
 @foreach ($articles as $i =>$items)
       <ul>
       <li>作者账号：{{$items->uid}}</li>
-      <li>文章编号：{{$items->articleId}}</li>
+      <li>文章编号：{{$items->id}}</li>
       <li>作者：{{$items->author}}</li>
-      <a href="{{url('')}}/page-{{$items->articleId}}.html"><li>标题：{{$items->title}}</li></a>
+      <a href="{{url('')}}/page-{{$items->id}}.html"><li>标题：{{$items->title}}</li></a>
       <li>内容：{{$items->text}}</li>
       <li>发表时间：{{$items->createTime}}</li>
       <li>文章类型：历史={{$items->kind}}</li>

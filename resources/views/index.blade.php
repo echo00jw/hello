@@ -25,7 +25,7 @@
     @foreach ($articles as $i =>$items)
       <ul>
       <li>作者账号：{{$items->uid}}</li>
-      <li>文章编号：{{$items->articleId}}</li>
+      <li>文章编号：{{$items->id}}</li>
       <li>作者：{{$items->author}}</li>
       <li>标题：{{$items->title}}</li>
       <li>内容：{{$items->text}}</li>

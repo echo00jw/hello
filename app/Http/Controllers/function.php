@@ -58,7 +58,7 @@
     function person($person,$request)//储存登陆信息
     {
     	$model = new login;
-		$model->id = $request->input('id');
+		$model->uid = $request->input('id');
 		$model->password = md5($request->password);
 		$model->ip = ip();//获取ip
 		$model->loginTime = date('Y-m-d H:i:s') ;
@@ -86,24 +86,24 @@
 	    	return $articles;
 	    }
 	    elseif($choice==5) {
-	    	$articles = article::where('articleId',$messages)->get();
+	    	$articles = article::where('id',$messages)->get();
 	    	return $articles;
 	    }
     }
 
 /*---------------page函数库------------*/
 
-	function edit_load($articleId)
+	function edit_load($id)
 	{
-		//echo $articleId;
+		//echo $id;
 		$temp = session()->get('id');
-    	$articles = article::where('articleId',$articleId)->first();//得到文章信息
+    	$articles = article::where('id',$id)->first();//得到文章信息
     	//更新浏览历史
     	$model = new user;
         $themodel = $model->find($temp);
         $history = json_decode($themodel['myhistory']);
         foreach ($history as $key => $value) {
-        	if(strcmp($value,$articleId)!=0){
+        	if(strcmp($value,$id)!=0){
         		$code =1;
         	}else {
         		echo $value;
@@ -112,7 +112,7 @@
         	}
         }
         if ($code==1) {
-        	$history->$articleId = $articleId;
+        	$history->$id = $id;
         	$history = json_encode($history);
         	$themodel->myhistory = $history;
         	$themodel->save();//更新数据
@@ -122,7 +122,7 @@
     	$code=0;//初始化
     	if($collection!=NULL) {
 	    	foreach ($collection as $key => $value) {
-	    		if(strcmp($value,$articleId)==0) {//判断是否已经收藏过了
+	    		if(strcmp($value,$id)==0) {//判断是否已经收藏过了
 	    			$code = 1; //收藏了置1 否则置 0
 	    			break;
 	    		}
@@ -133,7 +133,7 @@
     	$code_1=0;//初始化
     	if($giveMark!=NULL) {
 	    	foreach ($giveMark as $key => $value) {
-	    		if(strcmp($value,$articleId)==0) {//判断是否已经评分过了
+	    		if(strcmp($value,$id)==0) {//判断是否已经评分过了
 	    			$code_1 = 1; //评分了置1 否则置 0
 	    			break;
 	    		}
@@ -145,14 +145,14 @@
     	return $data;
 		    	
 	}
-	function data_change($score,$articleId)
+	function data_change($score,$id)
 	{
 		$temp = session()->get('id');
 		if($score==-1){
 			$model = new user;
 			$themodel = $model->find($temp);
 			$history = json_decode($themodel['mycollection']);
-	        $history->$articleId = $articleId;//将值写进去
+	        $history->$id = $id;//将值写进去
 	        $history = json_encode($history);//转化为json
 	        $themodel->mycollection = $history;
 	        $themodel->save();//更新数据
@@ -160,7 +160,7 @@
 		}elseif($score>=0)
 		{
 			//文章表修改
-			$themodel = article::find($articleId);//得到文章信息
+			$themodel = article::find($id);//得到文章信息
 			//dd($themodel);
 			//echo $themodel->score;
 			$themodel->score = $themodel->score + $score;
@@ -172,7 +172,7 @@
 			$model = new user;
 			$themodel = $model->find($temp);
 			$history = json_decode($themodel['giveMark']);
-	        $history->$articleId = $articleId;//将值写进去
+	        $history->$id = $id;//将值写进去
 	        $history = json_encode($history);//转化为json
 	        $themodel->giveMark = $history;
 	        $themodel->save();//更新数据
