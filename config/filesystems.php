@@ -54,6 +54,11 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'tvupload' => [
+            'driver' => 'local',
+            'root' => public_path('tvupload'),
+
+        ],
 
         's3' => [
             'driver' => 's3',

@@ -7,18 +7,18 @@
 
 	function ip()//获取ip
 	{
-  		$onlineip=''; 
-	 	if(getenv('HTTP_CLIENT_IP')&&strcasecmp(getenv('HTTP_CLIENT_IP'),'unknown')){ 
-	    	$onlineip=getenv('HTTP_CLIENT_IP'); 
-	 	} 
-		elseif(getenv('HTTP_X_FORWARDED_FOR')&&strcasecmp(getenv('HTTP_X_FORWARDED_FOR'),'unknown')){ 
-	  	   $onlineip=getenv('HTTP_X_FORWARDED_FOR'); 
+  		$onlineip='';
+	 	if(getenv('HTTP_CLIENT_IP')&&strcasecmp(getenv('HTTP_CLIENT_IP'),'unknown')){
+	    	$onlineip=getenv('HTTP_CLIENT_IP');
+	 	}
+		elseif(getenv('HTTP_X_FORWARDED_FOR')&&strcasecmp(getenv('HTTP_X_FORWARDED_FOR'),'unknown')){
+	  	   $onlineip=getenv('HTTP_X_FORWARDED_FOR');
 	  	}
-		elseif(getenv('REMOTE_ADDR')&&strcasecmp(getenv('REMOTE_ADDR'),'unknown')){ 
-	  	   $onlineip=getenv('REMOTE_ADDR'); 
-	     } 
-	 	elseif(isset($_SERVER['REMOTE_ADDR'])&&$_SERVER['REMOTE_ADDR']&&strcasecmp($_SERVER['REMOTE_ADDR'],'unknown')){ 
-	    	$onlineip=$_SERVER['REMOTE_ADDR']; 
+		elseif(getenv('REMOTE_ADDR')&&strcasecmp(getenv('REMOTE_ADDR'),'unknown')){
+	  	   $onlineip=getenv('REMOTE_ADDR');
+	     }
+	 	elseif(isset($_SERVER['REMOTE_ADDR'])&&$_SERVER['REMOTE_ADDR']&&strcasecmp($_SERVER['REMOTE_ADDR'],'unknown')){
+	    	$onlineip=$_SERVER['REMOTE_ADDR'];
 	    }
 		return $onlineip;
     }
@@ -39,17 +39,17 @@
 		session()->put('answer', $person->answer);
 		session()->put('rule', $person->rule);
 		session()->put('code', $person->code);
-		session()->put('grade', $person->grade);    	
+		session()->put('grade', $person->grade);
     }
 
 
     function judge($temp)//错误信息判断
     {
-    	if($_SESSION['temp']==2){//密码判断		
+    	if($_SESSION['temp']==2){//密码判断
 			echo "<script type='text/javascript'>alert('密码错误');history.back();</script>";
 			$_SESSION['temp'] = 3;
 		}
-		if($temp==NULL){//账号判断		
+		if($temp==NULL){//账号判断
 			echo "<script type='text/javascript'>alert('账号错误');history.back();</script>";
 		}
     }
@@ -57,7 +57,7 @@
 
     function person($person,$request)//储存登陆信息
     {
-    	$model = new login;
+    $model = new login;
 		$model->uid = $request->input('id');
 		$model->password = md5($request->password);
 		$model->ip = ip();//获取ip
@@ -75,10 +75,10 @@
 	    }
 	    elseif($choice==2) {//通过标题查找文章
 	    	$articles = article::where('title', 'like' , '%'.$messages.'%')->paginate(2);//没有找到默认值为0
-	    	return $articles;	    	
+	    	return $articles;
 	    }
 	    elseif($choice==3) {//通过热词查找文章
-	    	$articles = article::where('keyWord', 'like' , '%'.$messages.'%')->paginate(5);	
+	    	$articles = article::where('keyWord', 'like' , '%'.$messages.'%')->paginate(5);
 	    	return $articles;
 	    }
 	    elseif($choice==4) {//通过内容查找
@@ -143,7 +143,7 @@
     	$data = ["person"=>$themodel,"collection"=>$code,"giveMark"=>$code_1,"articles"=>$articles];//打包数据
     	$data = json_encode($data);//转化为json
     	return $data;
-		    	
+
 	}
 	function data_change($score,$id)
 	{
@@ -179,5 +179,37 @@
 			return 1;
 		}
 	}
-    
-   
+
+
+/*
+*
+*
+*上传文件
+*
+*/
+
+	function saveUpload($url,$request)
+	{
+	$model = new article;
+	$model->uid = session()->get('id');      //用户id
+	$model->author=$request->author;         //作者
+	$model->title=$request->title;           //标题
+	$model->keyWord=$request->keyword;       //关键字
+	$model->kind=$request->kind;             //种类
+	$model->self=$request->copy;              //是否转载
+	$model->code=0;
+	$model->createTime=date('Y-m-d H:i:s');                //创建时间
+	$model->url = $url;                      //上传路径
+	$model->save();
+	}
+
+	/*
+	*
+	*
+	*生成弹框
+	*
+	*/
+	function _alert_back($_info){
+		echo "<script type='text/javascript'>alert('".$_info."');history.back();</script>";
+		exit();
+	}

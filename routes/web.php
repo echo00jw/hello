@@ -29,3 +29,9 @@ Route::get('/index','IndexController@load');//其他页面跳转到首页
 /*------page模块-------*/
 Route::get('/page-{articleId}.html','PageController@edit');
 
+
+
+
+
+
+Route::post('/upload/insert','uploadController@insert')->name('upload.insert');

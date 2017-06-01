@@ -4,12 +4,58 @@
   //print_r(json_decode($person));//将个人信息由json转换为数组
   $data = json_decode($data);
   //$articles = json_decode($articles);
-  
+
   //print_r($data);
   //exit();
 
-
 ?>
+
+
+
+<form method="post" action="{{route('upload.insert')}}" enctype="multipart/form-data">
+    {{ csrf_field() }}
+
+          <tr>
+             <td>
+                 file : <br />
+
+                    标题：<input type="text" name="title">(*必填)<br>
+                    关键词：<input type="text" name="keyword">(*必填)<br>
+                    作者：<input type="text" name="author">(*必填)<br>
+                    是否转载：<input type="radio" name="copy" value="1" /> 是  <input type="radio" name="copy" value="2" /> 否<br />
+                    分类：<br>
+                    <input type="radio" name="kind" value="1" /> 音乐<br />
+                    <input type="radio" name="kind" value="2" /> 摄影<br />
+                    <input type="radio" name="kind" value="3" /> 文学<br />
+                    <input type="radio" name="kind" value="4" /> 理工类<br />
+                    <input type="radio" name="kind" value="5" /> 生活类<br />
+
+                    @if (count($errors) > 0)
+                          <div class="alert alert-danger">
+                              <ul>
+                                  @foreach($errors->all() as $error)
+                                  <li>{{ $error }}</li>
+                                  @endforeach
+                              </ul>
+                          </div>
+                    @endif
+
+                 <input type="file" name="files" size="20" value="" />
+             </td>
+         </tr>
+         <tr>
+              <td>
+                 <input type="submit" class="btn btn-primary" value="上传" />
+              </td>
+         </tr>
+
+
+</form>
+
+
+
+
+
 <form method="post" action="{{url('')}}/search">{{ csrf_field() }}
     <ul style="list-style-type: none;">
     <li style="display:inline"><input type="radio" name="kind" value="2">标题</li>
@@ -41,9 +87,9 @@
       {{$articles->links()}}
     @endforeach
   </div>
-  <div><!--个人信息展示-->  
+  <div><!--个人信息展示-->
     <h2>个人信息展示</h2>
-        <ul> 
+        <ul>
           <li>昵称：{{$data->person->name}}</li>
           <li>性别：{{$data->person->sex}}</li>
           <li>密保问题：{{$data->person->question}}</li>
@@ -57,3 +103,5 @@
   </div>
 </div>
 <h2><a href="{{url('')}}/json_index">JSON显示界面</a></h2>
+
+</html>
